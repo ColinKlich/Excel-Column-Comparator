@@ -1,7 +1,7 @@
 # Excel Column Comparator
 This app compares two excel documents and uses a custom written "fuzzy matching" algorithm to compare a similar column in each document.
 Matches are exported to a new document along with a similarity index from 0-1 (This feature is currently disabled in production).
-
+!(columncompare.png)
 ## Makes use of these librarys:
 - Pandas
 - Jellyfish
