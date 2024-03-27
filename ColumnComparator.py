@@ -59,9 +59,9 @@ def __main__():
     
     wait = input()
     # new_df = pd.read_excel(file1_loc, sheet_name=sheet_name1)
-    columns = select_multiple(list(df_first_file.columns), tick_character='✔')
-    for serial in df_out:
-        df_first_file.loc[df_first_file[col_comparison] == serial]
+    # columns = select_multiple(list(df_first_file.columns), tick_character='✔')
+    # for serial in df_out:
+    #     df_first_file.loc[df_first_file[col_comparison] == serial]
 
     return 0
 
