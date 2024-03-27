@@ -10,13 +10,13 @@ def __main__():
     file1_loc = Path(input()).as_posix().replace("\"", "")
 
     print("Which sheet will you be using?")
-    sheet_name1 = input()
+    sheet_name1 = input() or "Sheet1"
 
     print("Input Filepath for the second file (.xlsx)")
     file2_loc = Path(input()).as_posix().replace("\"", "")
 
     print("Which sheet will you be using?")
-    sheet_name2 = input()
+    sheet_name2 = input() or "Sheet1"
 
     print("Which column will you be comparing? (Should be identical)")
     col_comparison = input()
@@ -26,14 +26,17 @@ def __main__():
         # df_first_file, df_second_file = readFiles(file1_loc,sheet_name1, file2_loc, sheet_name2)
         
         print("Reading in Files...")
-        df_first_file = pd.read_excel(file1_loc,sheet_name=sheet_name1)
-        df_second_file = pd.read_excel(file2_loc,sheet_name=sheet_name2)
-        print("Files Read!")
+        if file1_loc.__contains__(".csv"):
+            df_first_file = pd.read_csv(file1_loc)
+        else:
+            df_first_file = pd.read_excel(file1_loc,sheet_name=sheet_name1)
 
-        # print("Press (space) to select the columns from the first file")
-        # list1_col = select_multiple(list(df_first_file.columns), tick_character='✔')
-        # print("Press (space) to select the columns from the second file")
-        # list2_col = select_multiple(list(df_second_file.columns), tick_character='✔')
+        if file2_loc.__contains__(".csv"):
+            df_second_file = pd.read_csv(file2_loc)
+        else:
+            df_second_file = pd.read_excel(file2_loc,sheet_name=sheet_name2)
+
+        print("Files Read!")
 
     except:
         print("Input is incorrectly formatted! Try Again.")
@@ -54,14 +57,18 @@ def __main__():
         similar_items = compare_dataframes(list1, list2)
 
     df_out = pd.DataFrame(similar_items, columns=['Input '+ col_comparison, 'Master ' + col_comparison, 'Similarity'])
-    df_out.to_excel("output.xlsx", sheet_name='Sheet1')
+    # df_out.to_excel("output.xlsx", sheet_name='Sheet1', index=False)
     print("Found "+ str(len(similar_items)) + " similar items!")
     
-    wait = input()
-    # new_df = pd.read_excel(file1_loc, sheet_name=sheet_name1)
-    # columns = select_multiple(list(df_first_file.columns), tick_character='✔')
-    # for serial in df_out:
-    #     df_first_file.loc[df_first_file[col_comparison] == serial]
+    new_df = pd.merge(df_out, df_first_file, left_on='Input '+ col_comparison, right_on=col_comparison)
+    new_new_df = pd.merge(new_df, df_second_file, left_on='Master '+ col_comparison, right_on=col_comparison)
+    
+    cols = select_multiple(list(new_new_df.columns), tick_character='✔', ticked_indices=[0,1,2])
+    
+    new_new_df.to_excel("output.xlsx", sheet_name='Sheet1', columns=cols, index=False)
+    
+    print("Written to file\n")
+    wait = input("Press (enter) to close")
 
     return 0
 
