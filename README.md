@@ -19,4 +19,4 @@ Matches are exported to a new document along with a similarity index from 0-1 (T
 - This program is designed to be multi-functional and address similar processes with similar time-saving requirements
 
 ## Upcoming Features
-- Ability to select columns from source lists and output them to the 'output.xlsx' file
+- Ability to select columns from source lists and output them to the 'output.xlsx' file (v4)
