@@ -3,20 +3,23 @@ from difflib import SequenceMatcher
 import jellyfish
 from tqdm import tqdm
 from pathlib import Path
-from beaupy import select_multiple
+from beaupy import select_multiple, select
+import openpyxl
 
 def __main__():
     print("Input Filepath for the first file (.xlsx)")
     file1_loc = Path(input()).as_posix().replace("\"", "")
 
     print("Which sheet will you be using?")
-    sheet_name1 = input() or "Sheet1"
+    sheets = list_excel_sheets(file1_loc)
+    sheet_name1 = select(sheets)
 
     print("Input Filepath for the second file (.xlsx)")
     file2_loc = Path(input()).as_posix().replace("\"", "")
 
     print("Which sheet will you be using?")
-    sheet_name2 = input() or "Sheet1"
+    sheets = list_excel_sheets(file2_loc)
+    sheet_name2 = select(sheets)
 
     print("Which column will you be comparing? (Should be identical)")
     col_comparison = input()
@@ -63,7 +66,7 @@ def __main__():
     new_df = pd.merge(df_out, df_first_file, left_on='Input '+ col_comparison, right_on=col_comparison)
     new_new_df = pd.merge(new_df, df_second_file, left_on='Master '+ col_comparison, right_on=col_comparison)
     
-    cols = select_multiple(list(new_new_df.columns), tick_character='✔', ticked_indices=[0,1,2])
+    cols = select_multiple(list(new_new_df.columns), tick_character='*', ticked_indices=[0,1,2])
     
     new_new_df.to_excel("output.xlsx", sheet_name='Sheet1', columns=cols, index=False)
     
@@ -78,6 +81,11 @@ def similar(a, b):
     #SequenceMatcher(None, a, b).ratio()
     except:
         return 0
+
+def list_excel_sheets(file_path):
+    wb = openpyxl.load_workbook(file_path)
+    sheet_names = wb.sheetnames
+    return sheet_names
     
 def readFiles(file1_loc, sheet_name1, file2_loc, sheet_name2):
     print("Reading in Files...")
