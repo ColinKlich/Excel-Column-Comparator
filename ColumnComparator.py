@@ -99,13 +99,25 @@ def compare_dataframes(list1, list2):
     similar_items = []
     for item1 in tqdm(list1, desc="Loading…", ascii=False, ncols=75):
         str1 = str(item1)
+        str3 = clean(str1)
         for item2 in list2:
             str2 = str(item2)
+            str4 = clean(str2)
             if (str1.startswith(str2) or str1.endswith(str2) or str2.startswith(str1) or str2.endswith(str1)) and (len(str2) > 4) and (len(str1) > 4):
-                similar_items.append((item1, item2, 'n/a'))
+                similar_items.append((item1, item2, '99%'))
+                break
+            elif (str3.startswith(str4) or str3.endswith(str4) or str4.startswith(str3) or str4.endswith(str3)) and (len(str3) > 4) and (len(str4) > 4):
+                similar_items.append((item1, item2, '50%'))
                 break
     print("Complete")
     return similar_items
+
+def clean(string):
+    string2 = ''
+    for char in string:
+        if(char != '0'):
+            string2 += char
+    return string2
 
 
 if __name__ == "__main__": __main__()
