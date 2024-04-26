@@ -10,6 +10,7 @@ Matches are exported to a new document along with a similarity index from 0-1 (T
 - Difflib
 - Tqdm
 - Beaupy
+- Pyinstaller
 
 ## Goals
 - This program attempts to fix excel's built it fuzzy matching module
@@ -17,6 +18,7 @@ Matches are exported to a new document along with a similarity index from 0-1 (T
     - Versions 1-3 bring that time down to 1 hr. 
     - Versison 4 and beyond should bring that time down to 5 minutes.
 - This program is designed to be multi-functional and address similar processes with similar time-saving requirements
+- Code is compiled into an .exe file to run on any windows machine.
 
 ## Upcoming Features
-- Ability to select columns from source lists and output them to the 'output.xlsx' file (v4)
+- Ability to select columns from source lists and output them to the 'output.xlsx' file (v4) DONE
