@@ -48,7 +48,7 @@ def __main__():
     try:
         list1 = list(df_first_file[col_comparison])
         list2 = list(df_second_file[col_comparison])
-        similar_items = compare_dataframes(list1, list2)
+        similar_items, dissimilar_items = compare_dataframes(list1, list2)
     except:
         print("The selected column cannot be found. Enter a new column")
         col_comparison = input()
@@ -57,7 +57,7 @@ def __main__():
         list1 = list(df_first_file[col_comparison])
         list2 = list(df_second_file[col_comparison])
 
-        similar_items = compare_dataframes(list1, list2)
+        similar_items, dissimilar_items = compare_dataframes(list1, list2)
 
     df_out = pd.DataFrame(similar_items, columns=['Input '+ col_comparison, 'Master ' + col_comparison, 'Similarity'])
     # df_out.to_excel("output.xlsx", sheet_name='Sheet1', index=False)
@@ -69,6 +69,10 @@ def __main__():
     cols = select_multiple(list(new_new_df.columns), tick_character='*', ticked_indices=[0,1,2], pagination=True, page_size=10)
     
     new_new_df.to_excel("output.xlsx", sheet_name='Sheet1', columns=cols, index=False)
+
+    dissimilar_df = pd.DataFrame(dissimilar_items, columns=[col_comparison])
+    dissimilar_out = pd.merge(dissimilar_df, df_first_file, left_on=col_comparison, right_on=col_comparison)
+    dissimilar_out.to_excel("not found.xlsx", sheet_name='Sheet1', index=False)
     
     print("Written to file\n")
     wait = input("Press (enter) to close")
@@ -97,18 +101,26 @@ def readFiles(file1_loc, sheet_name1, file2_loc, sheet_name2):
 
 def compare_dataframes(list1, list2):
     similar_items = []
+    dissimilar_items = []
     for item1 in tqdm(list1, desc="Loading…", ascii=False, ncols=75):
         str1 = str(item1).replace('R90','R9')
+        foundVar = False
         for item2 in list2:
             str2 = str(item2).replace('R90','R9')
             if (str1.startswith(str2) or str1.endswith(str2) or str2.startswith(str1) or str2.endswith(str1)) and (len(str2) > 4) and (len(str1) > 4):
-                similar_items.append((item1, item2, 'Exact'))
+                foundVar = True
+                if (len(str1) <= 6 or len(str2) <= 6):
+                    similar_items.append((item1, item2, 'Possible'))
+                else:
+                    similar_items.append((item1, item2, 'Exact'))
                 break
+        if foundVar == False:
+            dissimilar_items.append(item1)
             # elif (str3.startswith(str4) or str3.endswith(str4) or str4.startswith(str3) or str4.endswith(str3)) and (len(str3) > 4) and (len(str4) > 4):
             #     similar_items.append((item1, item2, 'Possible'))
             #     break
     print("Complete")
-    return similar_items
+    return similar_items, dissimilar_items
 
 def clean(string):
     string2 = ''
