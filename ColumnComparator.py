@@ -42,7 +42,7 @@ def __main__():
         print("Files Read!")
 
     except:
-        print("Input is incorrectly formatted! Try Again.")
+        print("Cannot find the designated column! Check your spelling and try again.")
         __main__()
 
     try:
@@ -71,8 +71,13 @@ def __main__():
     new_new_df.to_excel("output.xlsx", sheet_name='Sheet1', columns=cols, index=False)
 
     dissimilar_df = pd.DataFrame(dissimilar_items, columns=[col_comparison])
-    dissimilar_out = pd.merge(dissimilar_df, df_first_file, left_on=col_comparison, right_on=col_comparison)
-    dissimilar_out.to_excel("not found.xlsx", sheet_name='Sheet1', index=False)
+    merge = input("Do you want to merge the 'Not Found' list with the input data? (y/n) \n WARNING: If input is too large, the program will crash!\n")
+    
+    if merge.lower() == 'n': 
+        dissimilar_df.to_excel("not found.xlsx", sheet_name='Sheet1', index=False)
+    else:
+        dissimilar_out = pd.merge(dissimilar_df, df_first_file, left_on=col_comparison, right_on=col_comparison)
+        dissimilar_out.to_excel("not found.xlsx", sheet_name='Sheet1', index=False)
     
     print("Written to file\n")
     wait = input("Press (enter) to close")
@@ -114,7 +119,7 @@ def compare_dataframes(list1, list2):
                 else:
                     similar_items.append((item1, item2, 'Exact'))
                 break
-        if foundVar == False:
+        if foundVar == False and item1 != '':
             dissimilar_items.append(item1)
             # elif (str3.startswith(str4) or str3.endswith(str4) or str4.startswith(str3) or str4.endswith(str3)) and (len(str3) > 4) and (len(str4) > 4):
             #     similar_items.append((item1, item2, 'Possible'))
