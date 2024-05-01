@@ -23,3 +23,4 @@ Matches are exported to a new document along with a similarity index from 0-1 (T
 ## Upcoming Features
 - Ability to select columns from source lists and output them to the 'output.xlsx' file (v4) DONE
 - Exports 'Not Found' list along with 'Found' list (v6) DONE
+- Version 7: FINAL - speed improved 300% compared to V6. 'not found' list is merged with input to show all original data.
